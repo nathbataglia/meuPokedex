@@ -21,7 +21,7 @@ aplicativo.post('/acessar', (req, res) => {
     });
 
     else res.status(401).send({ 
-        sucesso: false, erro: 'Usuário ou Senha inválidos' 
+        sucesso: false, erro: 'Campo Login e/ou Senha inválido(s)' 
     });
 });
 
@@ -29,12 +29,12 @@ aplicativo.post('/registrar-pokemon', async (req, res) => {
     try {
         const { idPokemon, apelidoPokemon } = req.body;
         if(!idPokemon || !apelidoPokemon) return res.status(400).send({ 
-            erro: 'Os campos Id do Pokemon e Apelido são necessários' 
+            erro: 'Preencha os campos Id do Pokemon e Apelido' 
         });
 
         const pokemonJaExiste = listaPokemons.find(p => p.apelidoPokemon === apelidoPokemon);
         if(pokemonJaExiste) return res.status(400).send({ 
-            erro: 'Este apelido já está sendo usado' 
+            erro: 'Este apelido já está sendo usado por outro pokemon cadastrado' 
         });
 
         const resposta = await axios.get(`https://pokeapi.co/api/v2/pokemon/${idPokemon}`);
@@ -48,11 +48,11 @@ aplicativo.post('/registrar-pokemon', async (req, res) => {
         res.send(dadosPokemon);
     } catch (erro) {
         res.status(400).send({ 
-            erro: 'Erro ao registrar o Pokemon' 
+            erro: 'Erro no registro do Pokemon' 
         });
     }
 });
 
 aplicativo.get('/listar-pokemons', (req, res) => res.send(listaPokemons));
 
-aplicativo.listen(3000, () => console.log('Servidor ativo na porta 3000'));
+aplicativo.listen(3000, () => console.log('Servidor iniciado'));
